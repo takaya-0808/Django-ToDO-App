@@ -5,6 +5,17 @@ services:
   db:
 
   web:
-    build: "./django/"
+    build: ./django/
+    container_name: todo_djang
+    command: uwsgi --socket :8001 --module app.wsgi --py-autoreload 1 --logto /tmp/mylog.log
+    volumes:
+      - ./src:/code
+      - ./static:/static
+    expose:
+      - "8001"
+    env_file:
+      - ./django/.env
+    depends_on:
+      - db
 
   nginx:
